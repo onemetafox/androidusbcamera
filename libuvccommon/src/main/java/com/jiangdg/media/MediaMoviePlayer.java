@@ -341,7 +341,11 @@ public class MediaMoviePlayer {
 				} // for (;local_isRunning;)
 			} finally {
 				if (DEBUG) Log.v(TAG, "player task finished:local_isRunning=" + local_isRunning);
-				handleStop();
+				try {
+					handleStop();
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		}
 	};
@@ -443,7 +447,7 @@ public class MediaMoviePlayer {
 	 * @return
 	 * @throws InterruptedException
 	 */
-	private final boolean processPrepared(final int req) throws InterruptedException {
+	private final boolean processPrepared(final int req) throws InterruptedException, IOException {
 		boolean local_isRunning = true;
 		switch (req) {
 		case REQ_START:
@@ -476,7 +480,7 @@ public class MediaMoviePlayer {
 	 * @param req
 	 * @return
 	 */
-	private final boolean processPlaying(final int req) {
+	private final boolean processPlaying(final int req) throws IOException {
 		boolean local_isRunning = true;
 		switch (req) {
 		case REQ_PREPARE:
@@ -510,7 +514,7 @@ public class MediaMoviePlayer {
 	 * @return
 	 * @throws InterruptedException
 	 */
-	private final boolean processPaused(final int req) throws InterruptedException {
+	private final boolean processPaused(final int req) throws InterruptedException, IOException {
 		boolean local_isRunning = true;
 		switch (req) {
 		case REQ_PREPARE:
@@ -813,7 +817,7 @@ public class MediaMoviePlayer {
         mRequestTime = -1;
 	}
 
-	private final void handleLoop(final IFrameCallback frameCallback) {
+	private final void handleLoop(final IFrameCallback frameCallback) throws IOException {
 //		if (DEBUG) Log.d(TAG, "handleLoop");
 
 		synchronized (mSync) {
@@ -1037,7 +1041,7 @@ public class MediaMoviePlayer {
 		}
 	}
 
-	private final void handleStop() {
+	private final void handleStop() throws IOException {
     	if (DEBUG) Log.v(TAG, "handleStop:");
     	synchronized (mVideoTask) {
     		internal_stop_video();

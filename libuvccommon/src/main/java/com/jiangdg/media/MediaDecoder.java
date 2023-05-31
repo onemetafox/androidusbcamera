@@ -354,7 +354,7 @@ public abstract class MediaDecoder implements IMediaCodec {
 	}
 
 	@Override
-	public void release() {
+	public void release() throws IOException {
 		if (DEBUG) Log.v(TAG, "release:");
 		if (mState != STATE_UNINITIALIZED) {
 			stop();
@@ -364,7 +364,7 @@ public abstract class MediaDecoder implements IMediaCodec {
 		internal_release();
 	}
 
-	private void internal_release() {
+	private void internal_release() throws IOException {
 		if (mMediaCodec != null) {
 			mMediaCodec.release();
 			mMediaCodec = null;
