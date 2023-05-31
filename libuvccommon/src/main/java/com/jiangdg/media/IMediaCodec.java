@@ -25,7 +25,7 @@ public interface IMediaCodec {
 	public void prepare() throws IOException;
 	public void start();
 	public void stop();
-	public void release();
+	public void release() throws IOException;
 	public boolean isPrepared();
 	public boolean isRunning();
 }
